@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>หล่น</title>
+    <style>
+        body{
+        background: #101010;
+        color: white;
+        font-family: monospace;
+        text-align: center;
+        padding: 24px;
+        }
+        h1{color: #b6afbc;}
+        button{
+        padding: 12px 25px;
+        background: #b6afbc;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        }
+        #lyrics {
+        margin-top: 40px;
+        font-size: 24px;
+        min-height: 60px;
+        font-family:'sans-serif';
+    }
+        .fade{animation:fadeIn 1s;}
+        @keyframes fadeIn{from{opacity:0;} to{opacity:1;}}
+        .sad {
+            position: fixed;
+            top: -30px;
+            color: #eeeeee;
+            opacity: 0.5;
+            animation: fallDown 6s linear forwards;
+            pointer-events: none;
+        }
+        @keyframes fallDown {
+            to {transform: translateY(110vh); opacity: 0;}
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Song For you</h1>
+    <p>เพลงนี้อยากให้ลองฟัง...</p>
+    <button id="PlayButton">เล่นเพลง</button>
+    <audio id="Song" src="https://naayrlee.github.io/Song/fall.mp4"></audio>
+    <div id="lyrics"></div>
+    <script>
+        const song = document.getElementById("Song");
+        const button = document.getElementById("PlayButton");
+        const lyricsBox = document.getElementById("lyrics");
+        const lyrics = [
+  { time: 0.5, text: "I guess it is time to wake" },
+  { time: 2.0, text: "ฉันไม่ควรที่จะต้อง Fake" },
+  { time: 4.0, text: "Conversation ที่จะ Make" },
+  { time: 5.5, text: "เพื่อให้เราได้ไปกันต่อ" },
+  { time: 7.0, text: "Just like ที่เธอเคย Said" },
+  { time: 8.5, text: "ระหว่างเรา There's nothing left" },
+  { time: 10.5, text: "ฉันแค่อยากจะ Try again" },
+  { time: 12.0, text: "แม้รู้ว่าควรต้องพอ" },
+  { time: 14.0, text: "หลังจากนี้จะไม่มีเสียงของเธอ No more" },
+  { time: 18.0, text: "เสียงที่ฉันจะได้ยินมันก่อนนอน" },
+  { time: 21.5, text: "Baby, it's might be a long gone" },
+  { time: 25.0, text: "คงจะถึงเวลาต้อง Move on.", color: "#DC143C" },
+  { time: 29.0, text: "Down and down จากนี้เราคงไม่พบกันอีก" },
+  { time: 32.5, text: "Down and down ฉันเฝ้ามองเธอกลายเป็นอดีต" },
+  { time: 36.0, text: "Baby มันยากที่จะต้องทำใจ" },
+  { time: 39.5, text: "ให้อยู่ต่อให้ได้ในวันที่เธอหายไป" },
+  { time: 43.0, text: "Down and down ไม่รู้เธอเป็นเหมือนฉันหรือเปล่า" },
+  { time: 47.0, text: "ทุกคืนแสงดาวยังสะท้อนวันเก่า" },
+  { time: 50.0, text: "ทำได้แค่ฝัน ทำได้แค่นั้น" },
+  { time: 53.5, text: "แต่คงไม่ได้เจอกันอีกแล้วในความเป็นจริง..." }
+];
+
+        let lastText = 0;
+        button.addEventListener("click",()=>{
+            if(song.paused){
+                song.play();
+                button.textContent = "ขอพัก...";
+            }else{
+                song.pause();
+                button.textContent = "เล่นต่อ...";
+            }
+        });
+        song.addEventListener("timeupdate", () => {
+            let text = "";
+            let color = "";
+            for (const line of lyrics) {
+                if (song.currentTime >= line.time) {
+                    text = line.text;
+                    color = line.color || "";
+                }
+            }
+            if (text !== lastText) {
+                lastText = text;
+                lyricsBox.innerHTML = `<div class="fade">${text}</div>`;
+                lyricsBox.style.color = color;
+            }
+        });
+        song.addEventListener("ended", () => {
+            button.textContent = "(╥‸╥)";
+        });
+        setInterval(() => {
+            const sad = document.createElement("div");
+            sad.className = "sad";
+            sad.textContent = "☹";
+            sad.style.left = Math.random() * 100 + "vw";
+            sad.style.fontSize = 14 + Math.random() * 30 + "px";
+            document.body.appendChild(sad);
+            setTimeout(() => sad.remove(), 7000);
+        }, 600);
+    </script>
+</body>
+
+</html>
